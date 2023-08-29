@@ -3,6 +3,7 @@ package com.bagih.belajarspringdbrelationship.controller
 import com.bagih.belajarspringdbrelationship.data.model.Player
 import com.bagih.belajarspringdbrelationship.service.PlayerProfileService
 import com.bagih.belajarspringdbrelationship.service.PlayerService
+import com.bagih.belajarspringdbrelationship.service.RegistrationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,7 +20,9 @@ class PlayerController(
     @Autowired
     val playerService: PlayerService,
     @Autowired
-    val playerProfileService: PlayerProfileService
+    val playerProfileService: PlayerProfileService,
+    @Autowired
+    val registrationService: RegistrationService
 ) {
     @GetMapping
     fun getAllPlayers(): List<Player>{
@@ -41,10 +44,24 @@ class PlayerController(
         playerService.deletePlayerById(id)
     }
 
-    @PutMapping("/{id}/profiles/{profile_id}")
-    fun assignDetail(@PathVariable id: Int, @PathVariable profile_id: Int): Player{
-        val profile = playerProfileService.getPlayerProfileById(profile_id)
+    @PutMapping("/{id}/profiles/{profileId}")
+    fun assignDetail(@PathVariable id: Int, @PathVariable profileId: Int): Player{
+        val profile = playerProfileService.getPlayerProfileById(profileId)
         println(profile)
         return playerService.assignProfile(id, profile)
+    }
+
+    @PutMapping("/{id}/registrations/{registrationId}")
+    fun assignRegistration(@PathVariable id: Int, @PathVariable registrationId: Int): Player{
+        val registration = registrationService.getRegistrationById(registrationId)
+        println(registration.toString())
+        return playerService.assignRegistration(id, registration)
+    }
+
+    @PutMapping("/{id}/remove_registration/{registrationId}")
+    fun removeRegistration(@PathVariable id: Int, @PathVariable registrationId: Int): Player{
+        val registration= registrationService.getRegistrationById(registrationId)
+        println(registration.toString())
+        return playerService.removeRegistration(id, registration)
     }
 }
