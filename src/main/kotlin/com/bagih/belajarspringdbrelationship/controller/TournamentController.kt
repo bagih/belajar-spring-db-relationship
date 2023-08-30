@@ -1,7 +1,9 @@
 package com.bagih.belajarspringdbrelationship.controller
 
+import com.bagih.belajarspringdbrelationship.data.model.Category
 import com.bagih.belajarspringdbrelationship.data.model.Registration
 import com.bagih.belajarspringdbrelationship.data.model.Tournament
+import com.bagih.belajarspringdbrelationship.service.CategoryService
 import com.bagih.belajarspringdbrelationship.service.RegistrationService
 import com.bagih.belajarspringdbrelationship.service.TournamentService
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,10 +19,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/tournaments")
 class TournamentController(
-    @Autowired
     val tournamentService: TournamentService,
-    @Autowired
-    val registrationService: RegistrationService
+    val registrationService: RegistrationService,
+    val categoryService: CategoryService
 ) {
     @GetMapping
     fun getAllTournaments(): List<Tournament>{
@@ -54,5 +55,19 @@ class TournamentController(
         val registration: Registration = registrationService.getRegistrationById(registrationId)
         println(registration.toString())
         return tournamentService.removeRegistration(id, registration)
+    }
+
+    @PutMapping("/{id}/add_category/{categoryId}")
+    fun addCategory(@PathVariable id: Int, @PathVariable categoryId: Int): Tournament{
+        val category: Category = categoryService.getCategoryById(categoryId)
+        println(category.toString())
+        return tournamentService.addCategory(id, category)
+    }
+
+    @PutMapping("/{id}/remove_category/{categoryId}")
+    fun removeCategory(@PathVariable id: Int, @PathVariable categoryId: Int): Tournament{
+        val category: Category = categoryService.getCategoryById(categoryId)
+        println(category.toString())
+        return tournamentService.removeCategory(id, category)
     }
 }
