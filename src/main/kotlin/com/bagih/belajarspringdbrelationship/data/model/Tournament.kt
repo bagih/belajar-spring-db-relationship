@@ -21,7 +21,7 @@ data class Tournament(
     var location: String,
 
     @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
-    @JoinColumn(name = "")
+    @JoinColumn(name = "tournament_id")
     var registrations: MutableList<Registration>? = ArrayList(),
 
     @ManyToMany(cascade = [CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH])
